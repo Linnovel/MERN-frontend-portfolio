@@ -1,25 +1,23 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import { connectDb } from './config/db.js';
+import cors from 'cors'
 import path from 'path'
+import { connectDb } from './config/db.js'
 import productRoutes from './routes/product.routes.js'
-
 
 dotenv.config()
 
-const app = express();
+const app = express()
 const PORT = process.env.PORT || 5000
-
-
 const __dirname = path.resolve()
 
-
-
+app.use(cors())
 app.use(express.json())
 
-
+// Rutas
 app.use("/api/products", productRoutes)
 
+// Servir frontend en producción
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "/frontend/dist")))
 
@@ -28,8 +26,11 @@ if (process.env.NODE_ENV === "production") {
     })
 }
 
-
-app.listen(5000, () => {
-    connectDb()
-    console.log(`Servidor en el ${PORT}`)
+// Conectar DB y arrancar servidor
+connectDb().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Servidor en puerto ${PORT}`)
+    })
+}).catch((error) => {
+    console.error("Error al conectar a MongoDB:", error)
 })

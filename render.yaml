@@ -2,13 +2,16 @@ services:
   - type: web
     name: backend
     runtime: node
-    buildCommand: cd backend && npm install
+    rootDir: backend
+    buildCommand: npm install
     startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
-        value: tu-cadena-mongodb
+        value: mongodb+srv://luislinnovel:OUWW8RUFiAo0RPup@cluster0.nr3hfws.mongodb.net/products?retryWrites=true&w=majority&appName=Cluster0
+      - key: PORT
+        value: 5000
     autoDeploy: true
 
   - type: web
