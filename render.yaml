@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: backend
+    runtime: node
+    buildCommand: cd backend && npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        value: tu-cadena-mongodb
+    autoDeploy: true
+
+  - type: web
+    name: frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    autoDeploy: true
